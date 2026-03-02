@@ -18,8 +18,14 @@ defmodule Colliders.Polygon do
 
   alias Colliders.Types.PolygonPoint
 
+  @type map_point() ::
+          %{required(String.t()) => number(), required(String.t()) => number()}
+          | %{x: number(), y: number()}
+
+  @type points() :: list(PolygonPoint.t()) | list(map_point()) | list({number(), number()})
+
   @type t :: %__MODULE__{
-          points: [PolygonPoint.t()],
+          points: points(),
           meta: map(),
           min_x: float() | integer(),
           max_x: float() | integer(),
@@ -35,7 +41,7 @@ defmodule Colliders.Polygon do
 
   Raises `ArgumentError` if fewer than 3 points are provided.
   """
-  @spec new([PolygonPoint.t()], map()) :: t()
+  @spec new(points(), map()) :: t()
   def new(points, meta \\ %{})
 
   def new(points, _meta) when not is_list(points) do
