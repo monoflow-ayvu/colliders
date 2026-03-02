@@ -3,8 +3,8 @@ defmodule Colliders.Types do
     defstruct x: 0.0, y: 0.0
 
     @type t() :: %__MODULE__{
-            x: float() | integer(),
-            y: float() | integer()
+            x: number(),
+            y: number()
           }
   end
 
@@ -12,10 +12,10 @@ defmodule Colliders.Types do
     defstruct x: 0.0, y: 0.0, w: 0.0, h: 0.0
 
     @type t() :: %__MODULE__{
-            x: float() | integer(),
-            y: float() | integer(),
-            w: float() | integer(),
-            h: float() | integer()
+            x: number(),
+            y: number(),
+            w: number(),
+            h: number()
           }
   end
 end
