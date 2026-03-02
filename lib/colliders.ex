@@ -3,10 +3,10 @@ defmodule Colliders do
   Colliders module for polygon operations and collision detection.
   """
 
-  alias Colliders.Types.BBox
-  alias Colliders.Types.PolygonPoint
   alias Colliders.Clipper
   alias Colliders.Polygon
+  alias Colliders.Types.BBox
+  alias Colliders.Types.PolygonPoint
 
   @eps 1.0e-9
 

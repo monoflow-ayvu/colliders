@@ -5,7 +5,6 @@ defmodule CollidersTest do
   alias Colliders
   alias Colliders.Polygon
   alias Colliders.Types.BBox
-  alias Colliders.Polygon
 
   describe "bbox_intersects_polygon?/3" do
     test "returns true when bbox is fully inside polygon - 100% overlap" do

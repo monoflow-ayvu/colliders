@@ -7,6 +7,7 @@ defmodule Colliders.Clipper do
   alias Colliders.Polygon
   alias Colliders.Types.BBox
   alias Colliders.Types.PolygonPoint
+  alias Geo.Turf
 
   @eps 1.0e-9
 
@@ -52,7 +53,7 @@ defmodule Colliders.Clipper do
   def area([%PolygonPoint{} | _] = polygon_points) do
     coordinates = Enum.map(polygon_points, fn %PolygonPoint{x: x, y: y} -> {x, y} end)
     geo_polygon = %Geo.Polygon{coordinates: [coordinates]}
-    Geo.Turf.Measure.area(geo_polygon)
+    Turf.Measure.area(geo_polygon)
   end
 
   defp clip_edge([], _edge, _clip_coordinate), do: []
