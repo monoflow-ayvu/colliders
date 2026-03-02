@@ -86,7 +86,7 @@ Colliders.bbox_overlap_percentage(bbox, polygon)
 # => 16.666...
 ```
 
-Returns a float between `0.0` (no overlap) and `100.0` (bbox fully inside polygon).
+Returns a float between `0.0` (no overlap) and `100.0` (bbox fully inside the polygon).
 
 ## Types
 
