@@ -29,15 +29,6 @@ defmodule Colliders do
     end
   end
 
-  # Returns true if the bbox is entirely outside the polygon's AABB
-  # AABB stads for Axis-Aligned Bounding Box, it is basically a bounding box for the polygon
-  defp outside_aabb?(
-         %BBox{x: bx, y: by, w: bw, h: bh},
-         %Polygon{min_x: min_x, max_x: max_x, min_y: min_y, max_y: max_y}
-       ) do
-    bx + bw < min_x or bx > max_x or by + bh < min_y or by > max_y
-  end
-
   @doc """
   Returns the percentage of the bbox area that overlaps with the polygon.
 
@@ -49,7 +40,7 @@ defmodule Colliders do
   - polygon: A `%Polygon{}` struct
   """
   @spec bbox_overlap_percentage(BBox.t(), Polygon.t()) :: float()
-  def bbox_overlap_percentage(bbox, %Polygon{points: points}) do
+  def bbox_overlap_percentage(%BBox{} = bbox, %Polygon{points: points}) do
     intersection_area =
       points
       |> Clipper.clip_polygon(bbox)
@@ -61,6 +52,15 @@ defmodule Colliders do
       |> Clipper.area()
 
     intersection_area / bbox_area * 100
+  end
+
+  # Returns true if the bbox is entirely outside the polygon's AABB
+  # AABB stads for Axis-Aligned Bounding Box, it is basically a bounding box for the polygon
+  defp outside_aabb?(
+         %BBox{x: bx, y: by, w: bw, h: bh},
+         %Polygon{min_x: min_x, max_x: max_x, min_y: min_y, max_y: max_y}
+       ) do
+    bx + bw < min_x or bx > max_x or by + bh < min_y or by > max_y
   end
 
   defp bbox_to_polygon_points(%BBox{x: x, y: y, w: w, h: h}) do

@@ -19,18 +19,18 @@ defmodule Colliders.Polygon do
   alias Colliders.Types.PolygonPoint
 
   @type map_point() ::
-          %{required(String.t()) => number(), required(String.t()) => number()}
-          | %{x: number(), y: number()}
+          %{required(String.t()) => float(), required(String.t()) => float()}
+          | %{x: float(), y: float()}
 
-  @type points() :: list(PolygonPoint.t()) | list(map_point()) | list({number(), number()})
+  @type points() :: list(PolygonPoint.t()) | list(map_point()) | list({float(), float()})
 
   @type t :: %__MODULE__{
           points: points(),
           meta: map(),
-          min_x: float() | integer(),
-          max_x: float() | integer(),
-          min_y: float() | integer(),
-          max_y: float() | integer()
+          min_x: float(),
+          max_x: float(),
+          min_y: float(),
+          max_y: float()
         }
 
   defstruct [:points, :meta, :min_x, :max_x, :min_y, :max_y]
@@ -54,11 +54,12 @@ defmodule Colliders.Polygon do
   end
 
   def new(points, meta) do
-    x_coords = Enum.map(points, &axis_coords(&1, :x))
-    y_coords = Enum.map(points, &axis_coords(&1, :y))
+    normalized_points = normalize_points(points)
+    x_coords = Enum.map(normalized_points, &axis_coords(&1, :x))
+    y_coords = Enum.map(normalized_points, &axis_coords(&1, :y))
 
     %__MODULE__{
-      points: parse_points(points),
+      points: normalized_points,
       meta: meta,
       min_x: Enum.min(x_coords),
       max_x: Enum.max(x_coords),
@@ -67,12 +68,10 @@ defmodule Colliders.Polygon do
     }
   end
 
-  defp parse_points(points) do
+  defp normalize_points(points) do
     Enum.map(points, fn
       %PolygonPoint{} = point -> point
-      %{"x" => x, "y" => y} -> %PolygonPoint{x: x, y: y}
-      %{x: x, y: y} -> %PolygonPoint{x: x, y: y}
-      {x, y} -> %PolygonPoint{x: x, y: y}
+      point -> PolygonPoint.new(point)
     end)
   end
 

@@ -4,6 +4,7 @@ defmodule Colliders.Clipper do
   Clips a polygon against a rectangular bounding box.
   """
 
+  alias Colliders.Polygon
   alias Colliders.Types.BBox
   alias Colliders.Types.PolygonPoint
 
@@ -20,8 +21,11 @@ defmodule Colliders.Clipper do
   List of `%PolygonPoint{}` structs representing the clipped polygon vertices,
   or an empty list if there is no intersection.
   """
-  @spec clip_polygon([PolygonPoint.t()], BBox.t()) :: [PolygonPoint.t()]
-  def clip_polygon(polygon_points, %BBox{x: x, y: y, w: w, h: h}) do
+  @spec clip_polygon(list(PolygonPoint.t() | Polygon.t()), BBox.t()) :: [PolygonPoint.t()]
+  def clip_polygon([], _bbox), do: []
+  def clip_polygon(%Polygon{points: points}, bbox), do: clip_polygon(points, bbox)
+
+  def clip_polygon([%PolygonPoint{} | _] = polygon_points, %BBox{x: x, y: y, w: w, h: h}) do
     polygon_points
     |> ensure_closed()
     |> clip_edge(:left, x)
@@ -36,13 +40,16 @@ defmodule Colliders.Clipper do
   Calculates the area of a polygon in square units.
 
   ## Parameters
-  - polygon_points: List of `%PolygonPoint{}` structs representing the polygon vertices
+  - polygon_points: List of `%PolygonPoint{}` structs representing the polygon vertices, or the whole `%Colliders.Polygon{}` struct
 
   ## Returns
   The area as a float in square units.
   """
-  @spec area([PolygonPoint.t()]) :: float()
-  def area(polygon_points) do
+  @spec area(list(PolygonPoint.t()) | Colliders.Polygon.t()) :: float()
+  def area([]), do: 0.0
+  def area(%Colliders.Polygon{points: points}), do: area(points)
+
+  def area([%PolygonPoint{} | _] = polygon_points) do
     coordinates = Enum.map(polygon_points, fn %PolygonPoint{x: x, y: y} -> {x, y} end)
     geo_polygon = %Geo.Polygon{coordinates: [coordinates]}
     Geo.Turf.Measure.area(geo_polygon)

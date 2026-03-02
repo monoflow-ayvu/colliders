@@ -96,8 +96,17 @@ A vertex in a polygon.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `x`   | `float \| integer` | Horizontal coordinate |
-| `y`   | `float \| integer` | Vertical coordinate |
+| `x`   | `float` | Horizontal coordinate |
+| `y`   | `float` | Vertical coordinate |
+
+Use `PolygonPoint.new/1` to build one from a map or tuple — integers are automatically converted to floats:
+
+```elixir
+PolygonPoint.new({10, 20})                # => %PolygonPoint{x: 10.0, y: 20.0}
+PolygonPoint.new(%{x: 10.0, y: 20.0})     # => %PolygonPoint{x: 10.0, y: 20.0}
+PolygonPoint.new(%{"x" => 10, "y" => 20}) # => %PolygonPoint{x: 10.0, y: 20.0}
+
+```
 
 ### `%Colliders.Types.BBox{}`
 
@@ -105,23 +114,31 @@ An axis-aligned bounding box. `x` and `y` are the **top-left corner**.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `x`   | `float \| integer` | Left edge |
-| `y`   | `float \| integer` | Top edge |
-| `w`   | `float \| integer` | Width |
-| `h`   | `float \| integer` | Height |
+| `x`   | `float` | Left edge |
+| `y`   | `float` | Top edge |
+| `w`   | `float` | Width |
+| `h`   | `float` | Height |
+
+Use `BBox.new/1` to build one from a map or tuple:
+
+```elixir
+BBox.new({10, 20, 100, 50})                              # => %BBox{x: 10.0, y: 20.0, w: 100.0, h: 50.0}
+BBox.new(%{x: 10.0, y: 20.0, w: 100.0, h: 50.0})         # => %BBox{x: 10.0, y: 20.0, w: 100.0, h: 50.0}
+BBox.new(%{"x" => 10, "y" => 20, "w" => 100, "h" => 50}) # => %BBox{x: 10.0, y: 20.0, w: 100.0, h: 50.0}
+```
 
 ### `%Colliders.Polygon{}`
 
-A prepared polygon. Create it with `Colliders.Polygon.new/1` — do **not** build the struct manually, as the precomputed AABB bounds (`min_x`, `max_x`, `min_y`, `max_y`) will be missing.
+A prepared polygon. Create it with `Colliders.Polygon.new/2` — do **not** build the struct manually, as the precomputed AABB bounds (`min_x`, `max_x`, `min_y`, `max_y`) will be missing.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `points` | `[PolygonPoint.t()]` | Polygon vertices |
+| `points` | `list(PolygonPoint.t())` | Polygon vertices |
 | `meta`   | `map()` | Arbitrary metadata |
-| `min_x`  | `float \| integer` | Precomputed left bound |
-| `max_x`  | `float \| integer` | Precomputed right bound |
-| `min_y`  | `float \| integer` | Precomputed top bound |
-| `max_y`  | `float \| integer` | Precomputed bottom bound |
+| `min_x`  | `float` | Precomputed left bound |
+| `max_x`  | `float` | Precomputed right bound |
+| `min_y`  | `float` | Precomputed top bound |
+| `max_y`  | `float` | Precomputed bottom bound |
 
 ## API
 
@@ -135,7 +152,15 @@ Returns the percentage of the bbox area that overlaps the polygon, as a float be
 
 ### `Colliders.Polygon.new(points, meta \\ %{})`
 
-Creates a `%Polygon{}` struct, precomputing its AABB bounds. Raises `ArgumentError` if fewer than 3 points are given.
+Creates a `%Polygon{}` struct, precomputing its AABB bounds. The points list accepts `%PolygonPoint{}` structs, atom/string-key maps, or `{x, y}` tuples — all are normalized to `%PolygonPoint{}` with float coordinates. Raises `ArgumentError` if fewer than 3 points are given.
+
+### `Colliders.Types.PolygonPoint.new(point)`
+
+Creates a `%PolygonPoint{}` from a `{x, y}` tuple, an atom-key map (`%{x: ..., y: ...}`), or a string-key map (`%{"x" => ..., "y" => ...}`). Integer values are converted to floats. Raises `ArgumentError` for any other input.
+
+### `Colliders.Types.BBox.new(coords)`
+
+Creates a `%BBox{}` from a `{x, y, w, h}` tuple, an atom-key map (`%{x: ..., y: ..., w: ..., h: ...}`), or a string-key map (`%{"x" => ..., ...}`). Integer values are converted to floats. Raises `ArgumentError` for any other input.
 
 ## Contributing
 
