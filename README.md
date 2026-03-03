@@ -28,7 +28,7 @@ Add `colliders` to your dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:colliders, "~> 0.1.2"}
+    {:colliders, "~> 0.1.3"}
   ]
 end
 ```

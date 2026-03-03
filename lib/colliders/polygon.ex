@@ -33,6 +33,7 @@ defmodule Colliders.Polygon do
           max_y: float()
         }
 
+  @derive JSON.Encoder
   defstruct [:points, :meta, :min_x, :max_x, :min_y, :max_y]
 
   @doc """
