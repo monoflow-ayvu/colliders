@@ -14,7 +14,8 @@ defmodule Colliders.MixProject do
       aliases: aliases(),
       docs: docs(),
       package: package(),
-      description: "An Elixir library for detecting whether a bbox overlaps a polygon"
+      description: "An Elixir library for detecting whether a bbox overlaps a polygon.",
+      organization: "monoflow"
     ]
   end
 
