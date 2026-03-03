@@ -37,6 +37,6 @@ jobs:
         run: devenv shell --verbose mix do deps.get + deps.compile
 
       - name: Run Hex Publish
-        run: mix hex.publish --yes
+        run: devenv shell --verbose mix hex.publish --yes
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
