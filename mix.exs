@@ -7,7 +7,8 @@ defmodule Colliders.MixProject do
       version: "0.1.0",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -21,8 +22,19 @@ defmodule Colliders.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:geo, "~> 4.1"},
       {:geo_turf, "~> 0.3.1"}
+    ]
+  end
+
+  defp aliases do
+    [
+      check: [
+        "format --check-formatted",
+        "deps.unlock --check-unused",
+        "credo suggest --strict --all"
+      ]
     ]
   end
 end

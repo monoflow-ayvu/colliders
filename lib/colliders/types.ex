@@ -1,4 +1,8 @@
 defmodule Colliders.Types do
+  @moduledoc """
+  Types for the Colliders library.
+  """
+
   defmodule PolygonPoint do
     @moduledoc """
     A single vertex in a polygon, with `x` and `y` coordinates stored as floats.
